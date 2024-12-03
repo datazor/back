@@ -1,8 +1,8 @@
-image: node:18-alpine
 
-# Build stage
-ui_build:
+
+build-frontend:
   stage: build
+  image: node:18-alpine
   script:
     - cd ui
     - echo "Building frontend..."
@@ -13,14 +13,36 @@ ui_build:
     - merge_requests
     - branches
 
-# Test stage
-ui_test:
+build-backend:
+  stage: build
+  image: openjdk:21
+  script:
+    - cd backend
+    - echo "Building backend..."
+    - mvn clean package
+  only:
+    - merge_requests
+    - branches
+
+test-frontend:
   stage: test
+  image: node:18-alpine
   script:
     - cd ui
     - echo "Running frontend tests..."
     - npm install
     - npm run test
+  only:
+    - merge_requests
+    - branches
+
+test-backend:
+  stage: test
+  image: openjdk:21
+  script:
+    - cd backend
+    - echo "Running backend tests..."
+    - mvn test
   only:
     - merge_requests
     - branches

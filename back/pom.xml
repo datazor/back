@@ -8,10 +8,10 @@
 		<version>3.3.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>lm.mr</groupId>
-	<artifactId>pmt</artifactId>
+	<groupId>kanban</groupId>
+	<artifactId>back</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>pmt</name>
+	<name>back</name>
 	<description>Project Management Tools</description>
 	<url/>
 	<licenses>
@@ -113,5 +113,6 @@
 			</plugin>
 		</plugins>
 	</build>
+
 
 </project>

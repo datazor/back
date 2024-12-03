@@ -17,7 +17,7 @@ build-backend:
   stage: build
   image: openjdk:21
   script:
-    - cd backend
+    - cd back
     - echo "Building backend..."
     - mvn clean package
   only:
@@ -40,7 +40,7 @@ test-backend:
   stage: test
   image: openjdk:21
   script:
-    - cd backend
+    - cd back
     - echo "Running backend tests..."
     - mvn test
   only:

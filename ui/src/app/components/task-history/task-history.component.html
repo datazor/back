@@ -1,0 +1,34 @@
+<div class="history-container">
+    <ng-container *ngIf="history.length > 0; else noHistory">
+        <div class="history-item" *ngFor="let item of history">
+            <div class="history-timeline">
+                <div class="timeline-dot"></div>
+                <div class="timeline-line"></div>
+            </div>
+
+            <div class="history-content">
+                <div class="history-header">
+                    <span class="updater-name">{{ getUpdaterName(item.updatedBy) }}</span>
+                    <span class="update-time">{{ item.updatedAt | date:'medium' }}</span>
+                </div>
+
+                <div class="changes-list">
+                    <div class="change-item" *ngFor="let change of item.changes">
+                        <span class="field-name">{{ formatFieldName(change.field) }}:</span>
+                        <span>
+              <span class="old-value">{{ formatValue(change.oldValue) }}</span>
+              →
+              <span class="new-value">{{ formatValue(change.newValue) }}</span>
+            </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-template #noHistory>
+        <div class="no-history">
+            No update history available for this task.
+        </div>
+    </ng-template>
+</div>

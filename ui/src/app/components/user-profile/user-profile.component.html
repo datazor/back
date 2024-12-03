@@ -1,0 +1,30 @@
+<div class="profile-container" (clickOutside)="closeDropdown()">
+  <button class="profile-button" (click)="toggleDropdown()">
+    <div class="avatar">{{ getUserInitials() }}</div>
+    <div class="user-info">
+      <div class="username">{{ currentUser?.username }}</div>
+      <div class="email">{{ currentUser?.email }}</div>
+    </div>
+  </button>
+
+  <div class="dropdown" *ngIf="showDropdown">
+    <div class="dropdown-header">
+      <div class="username">{{ currentUser?.username }}</div>
+      <div class="dropdown-email">{{ currentUser?.email }}</div>
+    </div>
+    <div class="dropdown-options">
+      <button class="dropdown-item">
+        <span class="icon">👤</span>
+        Profile Settings
+      </button>
+      <button class="dropdown-item">
+        <span class="icon">⚙️</span>
+        Preferences
+      </button>
+      <button class="dropdown-item logout" (click)="logout()">
+        <span class="icon">🚪</span>
+        Logout
+      </button>
+    </div>
+  </div>
+</div>

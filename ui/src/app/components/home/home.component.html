@@ -1,0 +1,15 @@
+<div class="app-container">
+  <app-navbar (createProject)="openCreateDialog()"></app-navbar>
+  
+  <main class="main-content">
+    <app-project-list
+      [projects]="projects"
+    ></app-project-list>
+
+    <app-create-project-dialog
+      *ngIf="showCreateDialog"
+      (close)="closeCreateDialog()"
+      (projectCreated)="onProjectCreated($event)"
+    ></app-create-project-dialog>
+  </main>
+</div>

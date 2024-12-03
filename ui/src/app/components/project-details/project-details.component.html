@@ -1,0 +1,50 @@
+<div class="app-container">
+  <app-navbar></app-navbar>
+
+  <div class="project-details" *ngIf="!isLoading && project">
+    <header class="project-header">
+      <div class="project-info">
+        <h1>{{ project.name }}</h1>
+        <p class="project-description">{{ project.description }}</p>
+      </div>
+      <button class="btn-create-task btn-primary"
+              *ngIf="currentUserRole !== 'Observer'"
+              (click)="openCreateTaskPopup()">
+        <span class="icon">+</span>
+        Create Task
+      </button>
+    </header>
+
+    <div class="project-content">
+      <aside class="project-sidebar">
+        <app-member-list 
+          [members]="project.members"
+          [isAdmin]="currentUserRole === 'Administrator'"
+          (roleChange)="onMemberRoleChange($event)"
+        ></app-member-list>
+      </aside>
+
+      <main class="project-main">
+        <app-task-board 
+          [tasks]="tasks"
+          [members]="project.members"
+          [currentUserRole]="currentUserRole"
+          (assigneeChange)="onTaskAssigneeChange($event)"
+          (taskUpdate)="onTaskUpdate($event)"
+        ></app-task-board>
+      </main>
+    </div>
+
+    <app-create-task-popup
+      *ngIf="showCreateTaskPopup"
+      [members]="project.members"
+      (close)="closeCreateTaskPopup()"
+      (create)="onTaskCreate($event)"
+    ></app-create-task-popup>
+  </div>
+
+  <div class="loading-state" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading project...</p>
+  </div>
+</div>

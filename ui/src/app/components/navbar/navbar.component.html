@@ -1,0 +1,19 @@
+<nav class="navbar">
+  <div class="navbar-content">
+    <a routerLink="/" class="navbar-brand">
+      <span class="brand-logo">📋</span>
+      <span class="brand-name">Project Manager</span>
+    </a>
+
+    <div class="navbar-nav">
+      <div class="nav-links">
+        <button class="nav-button" (click)="onCreateProject()">
+          <span class="icon">+</span>
+          Create Project
+        </button>
+      </div>
+      <app-user-profile></app-user-profile>
+        <app-notification></app-notification>
+    </div>
+  </div>
+</nav>

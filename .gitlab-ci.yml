@@ -1,0 +1,26 @@
+image: node:18-alpine
+
+# Build stage
+ui_build:
+  stage: build
+  script:
+    - cd ui
+    - echo "Building frontend..."
+    - npm install
+    - npm ci --prefer-offline
+    - npm run build
+  only:
+    - merge_requests
+    - branches
+
+# Test stage
+ui_test:
+  stage: test
+  script:
+    - cd ui
+    - echo "Running frontend tests..."
+    - npm install
+    - npm run test
+  only:
+    - merge_requests
+    - branches

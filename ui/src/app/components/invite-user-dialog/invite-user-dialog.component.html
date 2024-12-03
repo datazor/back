@@ -1,0 +1,32 @@
+<div class="dialog-overlay" (click)="onClose()">
+  <div class="dialog-content" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <h2>Invite User to {{ projectName }}</h2>
+      <button class="close-button" (click)="onClose()">×</button>
+    </div>
+
+    <form [formGroup]="inviteForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">User Email</label>
+        <input
+          type="email"
+          id="email"
+          formControlName="email"
+          class="form-control"
+          placeholder="Enter user email"
+          [class.error]="inviteForm.get('email')?.invalid && inviteForm.get('email')?.touched"
+        />
+        <div class="error-message" *ngIf="inviteForm.get('email')?.invalid && inviteForm.get('email')?.touched">
+          Please enter a valid email address
+        </div>
+      </div>
+
+      <div class="dialog-actions">
+        <button type="button" class="btn btn-secondary" (click)="onClose()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="inviteForm.invalid">
+          Send Invitation
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

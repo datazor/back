@@ -1,0 +1,10 @@
+<div class="project-grid">
+  <app-project-card
+    *ngFor="let project of projects"
+    [project]="project"
+  ></app-project-card>
+
+  <div *ngIf="projects.length === 0" class="no-projects">
+    <p>No projects found. Create your first project to get started!</p>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<div class="task-board">
+  <div class="board-column" *ngFor="let column of columns"
+       (dragover)="onDragOver($event)"
+       (drop)="onDrop($event, column.status)">
+    <div class="column-header">
+      <h3>{{ column.title }}</h3>
+      <span class="task-count">{{ getTasksByStatus(column.status).length }}</span>
+    </div>
+    
+    <div class="task-list">
+      <app-task-card
+        *ngFor="let task of getTasksByStatus(column.status)"
+        [task]="task"
+        [members]="members"
+        [currentUserRole]="currentUserRole"
+        draggable="true"
+        (dragstart)="onDragStart($event, task)"
+        (assigneeChange)="onAssigneeChange($event)"
+        (taskUpdate)="onTaskUpdate($event)"
+      ></app-task-card>
+    </div>
+  </div>
+</div>

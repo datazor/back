@@ -1,0 +1,66 @@
+<div class="popup-overlay" (click)="onClose()">
+  <div class="popup-content" (click)="stopPropagation($event)">
+    <div class="popup-header">
+      <h2>Create New Task</h2>
+      <button class="close-button" (click)="onClose()">×</button>
+    </div>
+
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()">
+      <div class="popup-body">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input
+            type="text"
+            id="title"
+            formControlName="title"
+            class="form-control"
+            placeholder="Enter task title"
+          >
+          <div class="error-message" *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched">
+            Title must be at least 3 characters long
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            formControlName="description"
+            class="form-control"
+            placeholder="Enter task description"
+            rows="4"
+          ></textarea>
+          <div class="error-message" *ngIf="taskForm.get('description')?.invalid && taskForm.get('description')?.touched">
+            Description must be at least 10 characters long
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="priority">Priority</label>
+          <select id="priority" formControlName="priority" class="form-control">
+            <option *ngFor="let priority of priorities" [value]="priority">
+              {{ priority }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="assigneeId">Assignee</label>
+          <select id="assigneeId" formControlName="assigneeId" class="form-control">
+            <option value="">Unassigned</option>
+            <option *ngFor="let member of members" [value]="member.id">
+              {{ member.name }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="popup-footer">
+        <button type="button" class="btn btn-secondary" (click)="onClose()">Cancel</button>
+        <button type="submit" class="btn btn-primary" [disabled]="taskForm.invalid">
+          Create Task
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

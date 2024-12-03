@@ -1,0 +1,49 @@
+<div class="task-card" (click)="openDetailsPopup()">
+  <div class="task-header">
+    <h4 class="task-title">{{ task.title }}</h4>
+    <div class="priority-badge" [attr.data-priority]="task.priority?.toLowerCase()">
+      {{ task.priority }}
+    </div>
+  </div>
+  
+  <p class="task-description">{{ task.description }}</p>
+  
+  <div class="task-footer">
+    <div class="assignee" 
+         [class.clickable]="canAssignTask()"
+         (click)="toggleAssigneeDropdown($event)">
+      <div class="assignee-avatar" [class.unassigned]="!task.assigneeId">
+        {{ task.assigneeId ? getMemberInitials(getAssigneeName()) : '?' }}
+      </div>
+      <span class="assignee-name">{{ getAssigneeName() }}</span>
+
+      <!-- Assignee Dropdown -->
+      <div *ngIf="showAssigneeDropdown" class="assignee-dropdown">
+        <div class="dropdown-header">Assign to:</div>
+        <div class="dropdown-options">
+          <button *ngFor="let member of filteredMembers"
+                  class="dropdown-option"
+                  (click)="assignTask($event, member.id)"
+                  [class.active]="member.id == task.assigneeId">
+            <div class="option-avatar">{{ getMemberInitials(member.name) }}</div>
+            <span class="option-name">{{ member.name }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="task-date">
+      {{ task.createdAt | date:'short' }}
+    </div>
+  </div>
+
+  <!-- Task Details Popup -->
+  <app-task-details-popup
+    *ngIf="showDetailsPopup"
+    [task]="task"
+    [members]="members"
+    [currentUserRole]="currentUserRole"
+    (close)="closeDetailsPopup()"
+    (update)="onTaskUpdate($event)"
+  ></app-task-details-popup>
+</div>

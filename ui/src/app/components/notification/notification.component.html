@@ -1,0 +1,46 @@
+<div class="notification-container" (clickOutside)="closeDropdown()">
+    <button class="notification-button" (click)="toggleDropdown()">
+        <span class="notification-icon">✉️</span>
+        <span class="notification-badge" *ngIf="invitations.length > 0">
+      {{ invitations.length }}
+    </span>
+    </button>
+
+    <div class="notification-dropdown" *ngIf="showDropdown">
+        <div class="dropdown-header">
+            <span class="header-title">Project Invitations</span>
+        </div>
+
+        <div class="notifications-list">
+            <ng-container *ngIf="invitations.length > 0; else noInvitations">
+                <div *ngFor="let invitation of invitations"
+                     class="notification-item">
+                    <div class="notification-content">
+                        <div class="notification-title">
+                            Project Invitation: {{ invitation.projectName }}
+                        </div>
+                        <div class="notification-message">
+                            {{ invitation.invitedBy }} has invited you to join their project.
+                        </div>
+                    </div>
+                    <div class="notification-actions">
+                        <button class="action-button accept"
+                                (click)="acceptInvitation(invitation, $event)">
+                            Accept
+                        </button>
+                        <button class="action-button decline"
+                                (click)="declineInvitation(invitation, $event)">
+                            Decline
+                        </button>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<ng-template #noInvitations>
+    <div class="no-notifications">
+        No pending project invitations
+    </div>
+</ng-template>

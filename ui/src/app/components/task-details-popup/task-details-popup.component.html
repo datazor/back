@@ -1,0 +1,116 @@
+<div class="popup-overlay" (click)="onClose()">
+  <div class="popup-content" (click)="stopPropagation($event)">
+    <div class="popup-header">
+      <div class="header-content">
+        <ng-container *ngIf="!isEditing">
+          <h2>{{ task.title }}</h2>
+          <div class="task-meta">
+            <div class="meta-item">
+              <span class="meta-label">Status:</span>
+              <span class="status-badge" [class.todo]="task.status === 'TODO'"
+                                       [class.in-progress]="task.status === 'IN_PROGRESS'"
+                                       [class.done]="task.status === 'DONE'">
+                {{ task.status === 'IN_PROGRESS' ? 'In Progress' : task.status }}
+              </span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Priority:</span>
+              <span class="priority-badge" [class.high]="task.priority === 'HIGH'"
+                                         [class.medium]="task.priority === 'MEDIUM'"
+                                         [class.low]="task.priority === 'LOW'">
+                {{ task.priority }}
+              </span>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">Assignee:</span>
+              <span>{{ getAssigneeName() }}</span>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+      <div class="header-actions">
+        <button *ngIf="canEdit()" class="edit-button" (click)="toggleEdit(); $event.stopPropagation()">
+          {{ isEditing ? 'Cancel' : 'Edit' }}
+        </button>
+        <button class="close-button" (click)="onClose(); $event.stopPropagation()">×</button>
+      </div>
+    </div>
+
+    <div class="popup-body">
+      <ng-container *ngIf="!isEditing">
+        <div class="section">
+          <h3 class="section-title">Description</h3>
+          <p class="section-content">{{ task.description }}</p>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">Dates</h3>
+          <div class="section-content">
+            <div>Created: {{ task.createdAt | date:'medium' }}</div>
+          </div>
+        </div>
+
+          <div class="section">
+              <h3 class="section-title">Update History</h3>
+              <div class="section-content">
+                  <div *ngIf="isLoadingHistory" class="loading-history">
+                      Loading history...
+                  </div>
+                  <app-task-history
+                          *ngIf="!isLoadingHistory"
+                          [history]="taskHistory"
+                          [members]="members"
+                  ></app-task-history>
+              </div>
+          </div>
+      </ng-container>
+
+      <form *ngIf="isEditing" [formGroup]="taskForm" (ngSubmit)="onSubmit(); $event.stopPropagation()">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" id="title" formControlName="title" class="form-control">
+        </div>
+
+        <div class="form-group">
+          <label for="description">Description</label>
+          <textarea id="description" formControlName="description" class="form-control" rows="4"></textarea>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="status">Status</label>
+            <select id="status" formControlName="status" class="form-control">
+              <option *ngFor="let status of statuses" [value]="status">
+                {{ status === 'IN_PROGRESS' ? 'In Progress' : status }}
+              </option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="priority">Priority</label>
+            <select id="priority" formControlName="priority" class="form-control">
+              <option *ngFor="let priority of priorities" [value]="priority">
+                {{ priority }}
+              </option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="assigneeId">Assignee</label>
+          <select id="assigneeId" formControlName="assigneeId" class="form-control">
+            <option value="">Unassigned</option>
+            <option *ngFor="let member of members" [value]="member.id">
+              {{ member.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="toggleEdit(); $event.stopPropagation()">Cancel</button>
+          <button type="submit" class="btn btn-primary" [disabled]="taskForm.invalid">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

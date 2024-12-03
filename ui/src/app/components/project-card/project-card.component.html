@@ -1,0 +1,97 @@
+<div class="project-card"
+     [routerLink]="['/projects', project.id]"
+     (contextmenu)="onContextMenu($event)">
+    <div class="project-header">
+        <h3 class="project-name">{{ project.name }}</h3>
+        <div class="project-date">
+            Started {{ formatDate(project.startDate) }}
+        </div>
+    </div>
+
+    <p class="project-description">{{ project.description }}</p>
+
+    <div class="project-members">
+        <div class="members-header">
+            <h4>Team Members</h4>
+        </div>
+        <div class="member-avatars">
+            <div
+                    *ngFor="let member of project.members; let i = index"
+                    class="member-avatar-container"
+                    (mouseenter)="showMemberTooltip(i)"
+                    (mouseleave)="hideMemberTooltip()"
+            >
+                <div class="member-avatar" [class.administrator]="member.role === 'Administrator'"
+                     [class.member]="member.role === 'Member'"
+                     [class.observer]="member.role === 'Observer'">
+                    {{ getMemberInitials(member) }}
+                </div>
+
+                <div *ngIf="hoveredMemberIndex === i" class="member-tooltip">
+                    <div class="tooltip-content">
+                        <div class="tooltip-header">
+                            <div class="tooltip-avatar" [style.background-color]="getRoleColor(member.role)">
+                                {{ getMemberInitials(member) }}
+                            </div>
+                            <div class="tooltip-info">
+                                <div class="tooltip-name">{{ member.name }}</div>
+                                <div class="tooltip-role">{{ member.role }}</div>
+                                <div class="tooltip-email">{{ member.email }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invite Button -->
+            <div class="invite-button-container" *ngIf="isAdmin()">
+                <div class="invite-button" (click)="openInviteDialog(); $event.preventDefault(); $event.stopPropagation()">
+                    <span class="icon">+</span>
+                    <span class="invite-tooltip">Invite User</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Invite Dialog -->
+<div class="invite-dialog" *ngIf="showInviteDialog" (click)="closeInviteDialog()">
+    <div class="dialog-content" (click)="$event.stopPropagation()">
+        <div class="dialog-header">
+            <h3>Invite User to {{ project.name }}</h3>
+            <button class="close-button" (click)="closeInviteDialog()">×</button>
+        </div>
+
+        <form [formGroup]="inviteForm" (ngSubmit)="onInviteSubmit()">
+            <div class="dialog-body">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input
+                            type="email"
+                            id="email"
+                            formControlName="email"
+                            class="form-control"
+                            placeholder="Enter user's email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Role</label>
+                    <select id="role" formControlName="role" class="form-control">
+                        <option value="Member">Member</option>
+                        <option value="Observer">Observer</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="dialog-footer">
+                <button type="button" class="btn btn-secondary" (click)="closeInviteDialog()">
+                    Cancel
+                </button>
+                <button type="submit" class="btn btn-primary" [disabled]="!inviteForm.valid">
+                    Send Invitation
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

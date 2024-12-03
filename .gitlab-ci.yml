@@ -15,7 +15,7 @@ build-frontend:
 
 build-backend:
   stage: build
-  image: openjdk:21
+  image: maven:3.9-eclipse-temurin-21
   script:
     - cd back
     - echo "Building backend..."
@@ -38,7 +38,7 @@ test-frontend:
 
 test-backend:
   stage: test
-  image: openjdk:21
+  image: maven:3.9-eclipse-temurin-21
   script:
     - cd back
     - echo "Running backend tests..."

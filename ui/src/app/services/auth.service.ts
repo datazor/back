@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, from, throwError } from 'rxjs';
 import { tap, catchError, map } from 'rxjs/operators';
 import { User, AuthResponse } from '../models/user.model';
@@ -12,7 +13,7 @@ export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSubject.asObservable();
 
-  constructor() {
+  constructor(private router: Router) {
     const token = localStorage.getItem('token');
     if (token) {
       this.loadUser();
@@ -38,7 +39,7 @@ export class AuthService {
   register(user: User): Observable<AuthResponse> {
         return from(axios.post('/user/register', user)).pipe(
           map(res => res as unknown as AuthResponse),
-          tap(res => this.handleAuthentication(res)),
+          tap(() => this.router.navigate(['/login'])),
           catchError(error => {
             console.error('Login error:', error);
             return throwError(() => new Error('Invalid credentials'));

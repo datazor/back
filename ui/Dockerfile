@@ -20,7 +20,10 @@ RUN npm run build
 FROM nginx:alpine
 
 # Copy build output from the builder stage to the nginx HTML directory
-COPY --from=builder /app/dist/kanban-ui/*  /usr/share/nginx/html
+COPY --from=builder /app/dist/kanban-ui/* /usr/share/nginx/html/
+
+# Add a custom nginx configuration file
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80 for the application
 EXPOSE 80

@@ -33,6 +33,7 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+    debugger;
     if (this.loginForm.valid) {
       this.isLoading = true;
       this.errorMessage = '';
@@ -42,10 +43,11 @@ export class LoginComponent {
         next: () => {
           this.router.navigate(['/home']);
         },
-        error: (error) => {
+        error: () => {
           this.errorMessage = 'Invalid email or password';
           this.isLoading = false;
         }
+
       });
     } else {
       Object.keys(this.loginForm.controls).forEach(key => {

@@ -26,7 +26,7 @@ export class NotificationService {
     }
 
     private initializeSocket(username: string): void {
-        let ws =  new SockJS('http://localhost:8080/ws');
+        let ws =  new SockJS('https://kanban-back.lemrabott-abdelaziz.fr/ws');
         this.socketClient = Stomp.over(ws);
 
         this.socketClient.connect(

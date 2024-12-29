@@ -11,9 +11,12 @@ import kanban.back.controller.userManagement.response.LoginResponse;
 import kanban.back.service.userManagement.UserManagement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import static kanban.back.mapper.LoginMapper.toLoginResponse;
 import static kanban.back.mapper.UserMapper.mapToDomain;
@@ -54,12 +57,13 @@ public class UserManagementController {
             @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody UserLoginRequest request) {
+    public LoginResponse login(@Valid @RequestBody UserLoginRequest request) {
         var loginResult = userManagement.verify(mapToDomain(request));
 
-        return loginResult
-                .map(user -> ResponseEntity.ok(toLoginResponse(user)))
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+        return toLoginResponse(
+                loginResult.orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password")
+                )
+        );
     }
-
 }
